@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Calendar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-bg"></div>
+  <div id="seasonFx" class="season-fx" aria-hidden="true"></div>
+  <div class="overlay"></div>
+
+  <main class="calendar-shell">
+    <section class="calendar-card" aria-label="Interactive Calendar">
+      <header class="calendar-header">
+        <button id="prevBtn" class="nav-btn" aria-label="Previous month">&lt;</button>
+        <div class="month-controls">
+          <select id="monthSelect" class="select-control" aria-label="Select month"></select>
+          <select id="yearSelect" class="select-control" aria-label="Select year"></select>
+          <button id="todayBtn" class="today-btn" type="button">Today</button>
+        </div>
+        <button id="nextBtn" class="nav-btn" aria-label="Next month">&gt;</button>
+      </header>
+
+      <div class="weekdays" aria-hidden="true">
+        <span>Sun</span>
+        <span>Mon</span>
+        <span>Tue</span>
+        <span>Wed</span>
+        <span>Thu</span>
+        <span>Fri</span>
+        <span>Sat</span>
+      </div>
+
+      <div id="calendarGrid" class="calendar-grid" role="grid" aria-label="Calendar dates"></div>
+    </section>
+
+    <aside class="weather-panel">
+      <h2>Weather-Tracker</h2>
+      <form id="weatherForm" class="weather-form">
+        <input id="cityInput" type="text" placeholder="Enter city (e.g. Delhi)" aria-label="City name" />
+        <button type="submit">Fetch Weather</button>
+      </form>
+      <div id="weatherInfo" class="weather-info">Search a city to see live weather and cartoon art.</div>
+    </aside>
+  </main>
+
+  <div id="noteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalDateLabel">
+    <div class="modal-content">
+      <button id="closeModalBtn" class="close-btn" aria-label="Close note modal">x</button>
+      <h3 id="modalDateLabel">Selected Date</h3>
+      <div class="event-input-row">
+        <input id="eventInput" type="text" placeholder="Add event title..." />
+        <button id="addEventBtn" class="save-btn" type="button">Add</button>
+      </div>
+      <ul id="eventList" class="event-list"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

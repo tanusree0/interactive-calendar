@@ -1,0 +1,436 @@
+:root {
+  --text-color: #ffffff;
+  --muted-text: rgba(255, 255, 255, 0.85);
+  --card-bg: rgba(18, 25, 40, 0.5);
+  --cell-bg: rgba(255, 255, 255, 0.13);
+  --cell-hover: rgba(255, 255, 255, 0.24);
+  --today-bg: #ffd166;
+  --today-text: #212121;
+  --weekend-bg: rgba(255, 95, 109, 0.22);
+  --has-note-bg: rgba(71, 245, 184, 0.28);
+  --shadow: 0 22px 48px rgba(0, 0, 0, 0.34);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.app-bg,
+.season-fx,
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+}
+
+.app-bg {
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.8s ease, filter 0.8s ease;
+}
+
+.overlay {
+  z-index: -1;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.55));
+  backdrop-filter: blur(2px);
+  transition: background 0.8s ease;
+}
+
+body.day .overlay {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.24), rgba(0, 0, 0, 0.32));
+}
+
+body.night .overlay {
+  background: linear-gradient(120deg, rgba(5, 8, 21, 0.72), rgba(0, 0, 0, 0.78));
+}
+
+.season-fx {
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.calendar-shell {
+  width: min(1040px, 100%);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.calendar-card,
+.weather-panel {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.calendar-card {
+  padding: 18px;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.month-year {
+  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
+  margin: 0;
+  letter-spacing: 0.4px;
+}
+
+.month-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.select-control,
+.today-btn {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--text-color);
+  border-radius: 10px;
+  height: 38px;
+  padding: 0 10px;
+  font-size: 0.92rem;
+}
+
+.select-control {
+  min-width: 120px;
+}
+
+.select-control option {
+  color: #101010;
+}
+
+.today-btn {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nav-btn {
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text-color);
+  background: rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: transform 0.18s ease, background-color 0.24s ease;
+}
+
+.nav-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  font-weight: 600;
+  color: var(--muted-text);
+  margin-bottom: 10px;
+}
+
+.weekdays span {
+  text-align: center;
+  font-size: 0.88rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.day-cell {
+  min-height: 58px;
+  border-radius: 12px;
+  background: var(--cell-bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 8px;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.24s ease, border-color 0.24s ease;
+  position: relative;
+}
+
+.day-cell:hover {
+  transform: translateY(-2px);
+  background: var(--cell-hover);
+}
+
+.empty {
+  min-height: 58px;
+  border-radius: 12px;
+}
+
+.today {
+  background: var(--today-bg);
+  color: var(--today-text);
+  font-weight: 700;
+}
+
+.weekend {
+  background: var(--weekend-bg);
+}
+
+.has-note {
+  box-shadow: inset 0 0 0 1px rgba(130, 255, 222, 0.9);
+  background: var(--has-note-bg);
+}
+
+.day-cell .event-dot {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #7af6d7;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.16);
+}
+
+.weather-panel {
+  padding: 18px;
+}
+
+.weather-panel h2 {
+  margin: 0 0 12px;
+}
+
+.weather-form {
+  display: flex;
+  gap: 8px;
+}
+
+.weather-form input,
+.weather-form button,
+#eventInput,
+.save-btn {
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.weather-form input {
+  flex: 1;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.weather-form button,
+.save-btn {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(135deg, #5f72ff, #7c4dff);
+  color: #fff;
+  transition: filter 0.2s ease;
+}
+
+.weather-form button:hover,
+.save-btn:hover {
+  filter: brightness(1.08);
+}
+
+.weather-info {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 60px;
+}
+
+.weather-visual {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.weather-visual img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 16px;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-content {
+  width: min(420px, 100%);
+  background: #f8f9ff;
+  color: #1f2a44;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.28);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: #eee;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#eventInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d2d6ea;
+  margin: 8px 0 12px;
+}
+
+.event-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.event-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #edf0ff;
+  border: 1px solid #d2d8fa;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-top: 8px;
+}
+
+.event-delete-btn {
+  border: none;
+  border-radius: 8px;
+  background: #ffd7dd;
+  color: #941b2c;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+.event-empty {
+  color: #6d7693;
+  margin-top: 6px;
+}
+
+.fx-particle {
+  position: absolute;
+  top: -10%;
+  opacity: 0.5;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.fx-snow {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.fx-leaf {
+  width: 10px;
+  height: 8px;
+  border-radius: 70% 30% 70% 30%;
+  background: rgba(255, 159, 67, 0.9);
+}
+
+.fx-drop {
+  width: 2px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(164, 220, 255, 0.78);
+}
+
+.fx-sun {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 237, 176, 0.9);
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) translateX(30px) rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .calendar-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 14px;
+  }
+
+  .day-cell,
+  .empty {
+    min-height: 50px;
+  }
+
+  .calendar-card,
+  .weather-panel {
+    border-radius: 16px;
+  }
+
+  .select-control {
+    min-width: 105px;
+  }
+}
