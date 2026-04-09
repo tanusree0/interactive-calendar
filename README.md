@@ -4,6 +4,12 @@ An advanced **Interactive Calendar Web Application** built using **HTML, CSS, an
 This project combines **calendar functionality, event management, weather integration, and dynamic UI effects** to create a modern, real-world frontend application.
 
 ---
+
+## LIVE Demo 
+https://tanusree0.github.io/interactive-calendar/
+
+---
+
 ## 🎥 Demo Video
 
 [![Watch Demo](https://img.youtube.com/vi/WvbfyeUx0cc/0.jpg)](https://www.youtube.com/watch?v=WvbfyeUx0cc)
